@@ -1,0 +1,43 @@
+openapi: '3.0.3'
+info:
+  title: Auth API
+  version: '1.0.0'
+  description: API for managing auth
+servers:
+  - url: http://localhost:8080/api
+
+paths:
+  /auth/login:
+    post:
+      description: 'Login'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LoginDto'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LoginResponseDto'
+        '400':
+          description: Bad Request
+        '500':
+          description: Internal Server Error
+
+components:
+  schemas:
+    LoginDto:
+      type: object
+      properties:
+        email:
+          type: string
+        password:
+          type: string
+    LoginResponseDto:
+      type: object
+      properties:
+        token:
+          type: string
