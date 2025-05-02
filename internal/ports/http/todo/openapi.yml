@@ -9,6 +9,7 @@ servers:
 paths:
   /todos:
     get:
+      operationId: getTodos
       description: 'Get all todos'
       responses:
         '200':
@@ -24,6 +25,7 @@ paths:
         '500':
           description: Internal Server Error
     post:
+      operationId: createTodo
       description: 'Create a new todo'
       parameters: []
       requestBody:
@@ -44,6 +46,7 @@ paths:
           description: Internal Server Error
   /todo/{id}:
     get:
+      operationId: getTodo
       description: 'Get a todo by id'
       parameters:
         - name: id
@@ -63,6 +66,7 @@ paths:
         '500':
           description: Internal Server Error
     put:
+      operationId: updateTodo
       description: 'Update a todo'
       parameters:
         - name: id
@@ -87,6 +91,7 @@ paths:
         '500':
           description: Internal Server Error
     delete:
+      operationId: deleteTodo
       description: 'Delete a todo'
       parameters:
         - name: id
@@ -106,6 +111,13 @@ components:
   schemas:
     Todo:
       type: object
+      required:
+        - id
+        - title
+        - description
+        - completed
+        - createdAt
+        - lastUpdatedAt
       properties:
         id:
           type: string
@@ -116,11 +128,16 @@ components:
         completed:
           type: boolean
         createdAt:
-          type: integer
+          type: string
+          format: date-time
         lastUpdatedAt:
-          type: integer
+          type: string
+          format: date-time
     CreateTodoDto:
       type: object
+      required:
+        - title
+        - description
       properties:
         title:
           type: string

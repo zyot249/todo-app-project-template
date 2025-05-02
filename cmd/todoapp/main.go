@@ -1,24 +1,24 @@
 package main
 
 import (
-	"log"
 	"net/http"
+	"todo-app/internal/app"
+	todoHttp "todo-app/internal/ports/http"
+	"todo-app/internal/ports/http/todo"
+	"todo-app/pkg/core/logs"
 
 	"github.com/go-chi/chi/v5"
+	"github.com/sirupsen/logrus"
 )
 
 func main() {
-	router := chi.NewRouter()
+	logs.Init()
 
-	apiRouter := chi.NewRouter()
-	apiRouter.Get("/hello", func(w http.ResponseWriter, r *http.Request) {
-		w.WriteHeader(http.StatusOK)
-		w.Write([]byte("Hello, World!"))
+	logger := logrus.NewEntry(logrus.StandardLogger())
+
+	app := app.NewApplication(logger)
+
+	todoHttp.RunServer(func(router chi.Router) http.Handler {
+		return todo.HandlerFromMux(todo.NewTodoHandler(app), router)
 	})
-
-	router.Mount("/api", apiRouter)
-
-	if err := http.ListenAndServe(":8080", router); err != nil {
-		log.Fatal(err)
-	}
 }

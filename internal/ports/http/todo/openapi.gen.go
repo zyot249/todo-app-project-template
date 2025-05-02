@@ -4,34 +4,28 @@
 package todo
 
 import (
-	"bytes"
-	"compress/gzip"
-	"encoding/base64"
 	"fmt"
 	"net/http"
-	"net/url"
-	"path"
-	"strings"
+	"time"
 
-	"github.com/getkin/kin-openapi/openapi3"
 	"github.com/go-chi/chi/v5"
 	"github.com/oapi-codegen/runtime"
 )
 
 // CreateTodoDto defines model for CreateTodoDto.
 type CreateTodoDto struct {
-	Description *string `json:"description,omitempty"`
-	Title       *string `json:"title,omitempty"`
+	Description string `json:"description"`
+	Title       string `json:"title"`
 }
 
 // Todo defines model for Todo.
 type Todo struct {
-	Completed     *bool   `json:"completed,omitempty"`
-	CreatedAt     *int    `json:"createdAt,omitempty"`
-	Description   *string `json:"description,omitempty"`
-	Id            *string `json:"id,omitempty"`
-	LastUpdatedAt *int    `json:"lastUpdatedAt,omitempty"`
-	Title         *string `json:"title,omitempty"`
+	Completed     bool      `json:"completed"`
+	CreatedAt     time.Time `json:"createdAt"`
+	Description   string    `json:"description"`
+	Id            string    `json:"id"`
+	LastUpdatedAt time.Time `json:"lastUpdatedAt"`
+	Title         string    `json:"title"`
 }
 
 // UpdateTodoDto defines model for UpdateTodoDto.
@@ -41,29 +35,29 @@ type UpdateTodoDto struct {
 	Title       *string `json:"title,omitempty"`
 }
 
-// PutTodoIdJSONRequestBody defines body for PutTodoId for application/json ContentType.
-type PutTodoIdJSONRequestBody = UpdateTodoDto
+// UpdateTodoJSONRequestBody defines body for UpdateTodo for application/json ContentType.
+type UpdateTodoJSONRequestBody = UpdateTodoDto
 
-// PostTodosJSONRequestBody defines body for PostTodos for application/json ContentType.
-type PostTodosJSONRequestBody = CreateTodoDto
+// CreateTodoJSONRequestBody defines body for CreateTodo for application/json ContentType.
+type CreateTodoJSONRequestBody = CreateTodoDto
 
 // ServerInterface represents all server handlers.
 type ServerInterface interface {
 
 	// (DELETE /todo/{id})
-	DeleteTodoId(w http.ResponseWriter, r *http.Request, id string)
+	DeleteTodo(w http.ResponseWriter, r *http.Request, id string)
 
 	// (GET /todo/{id})
-	GetTodoId(w http.ResponseWriter, r *http.Request, id string)
+	GetTodo(w http.ResponseWriter, r *http.Request, id string)
 
 	// (PUT /todo/{id})
-	PutTodoId(w http.ResponseWriter, r *http.Request, id string)
+	UpdateTodo(w http.ResponseWriter, r *http.Request, id string)
 
 	// (GET /todos)
 	GetTodos(w http.ResponseWriter, r *http.Request)
 
 	// (POST /todos)
-	PostTodos(w http.ResponseWriter, r *http.Request)
+	CreateTodo(w http.ResponseWriter, r *http.Request)
 }
 
 // Unimplemented server implementation that returns http.StatusNotImplemented for each endpoint.
@@ -71,17 +65,17 @@ type ServerInterface interface {
 type Unimplemented struct{}
 
 // (DELETE /todo/{id})
-func (_ Unimplemented) DeleteTodoId(w http.ResponseWriter, r *http.Request, id string) {
+func (_ Unimplemented) DeleteTodo(w http.ResponseWriter, r *http.Request, id string) {
 	w.WriteHeader(http.StatusNotImplemented)
 }
 
 // (GET /todo/{id})
-func (_ Unimplemented) GetTodoId(w http.ResponseWriter, r *http.Request, id string) {
+func (_ Unimplemented) GetTodo(w http.ResponseWriter, r *http.Request, id string) {
 	w.WriteHeader(http.StatusNotImplemented)
 }
 
 // (PUT /todo/{id})
-func (_ Unimplemented) PutTodoId(w http.ResponseWriter, r *http.Request, id string) {
+func (_ Unimplemented) UpdateTodo(w http.ResponseWriter, r *http.Request, id string) {
 	w.WriteHeader(http.StatusNotImplemented)
 }
 
@@ -91,7 +85,7 @@ func (_ Unimplemented) GetTodos(w http.ResponseWriter, r *http.Request) {
 }
 
 // (POST /todos)
-func (_ Unimplemented) PostTodos(w http.ResponseWriter, r *http.Request) {
+func (_ Unimplemented) CreateTodo(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(http.StatusNotImplemented)
 }
 
@@ -104,8 +98,8 @@ type ServerInterfaceWrapper struct {
 
 type MiddlewareFunc func(http.Handler) http.Handler
 
-// DeleteTodoId operation middleware
-func (siw *ServerInterfaceWrapper) DeleteTodoId(w http.ResponseWriter, r *http.Request) {
+// DeleteTodo operation middleware
+func (siw *ServerInterfaceWrapper) DeleteTodo(w http.ResponseWriter, r *http.Request) {
 
 	var err error
 
@@ -119,7 +113,7 @@ func (siw *ServerInterfaceWrapper) DeleteTodoId(w http.ResponseWriter, r *http.R
 	}
 
 	handler := http.Handler(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		siw.Handler.DeleteTodoId(w, r, id)
+		siw.Handler.DeleteTodo(w, r, id)
 	}))
 
 	for _, middleware := range siw.HandlerMiddlewares {
@@ -129,8 +123,8 @@ func (siw *ServerInterfaceWrapper) DeleteTodoId(w http.ResponseWriter, r *http.R
 	handler.ServeHTTP(w, r)
 }
 
-// GetTodoId operation middleware
-func (siw *ServerInterfaceWrapper) GetTodoId(w http.ResponseWriter, r *http.Request) {
+// GetTodo operation middleware
+func (siw *ServerInterfaceWrapper) GetTodo(w http.ResponseWriter, r *http.Request) {
 
 	var err error
 
@@ -144,7 +138,7 @@ func (siw *ServerInterfaceWrapper) GetTodoId(w http.ResponseWriter, r *http.Requ
 	}
 
 	handler := http.Handler(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		siw.Handler.GetTodoId(w, r, id)
+		siw.Handler.GetTodo(w, r, id)
 	}))
 
 	for _, middleware := range siw.HandlerMiddlewares {
@@ -154,8 +148,8 @@ func (siw *ServerInterfaceWrapper) GetTodoId(w http.ResponseWriter, r *http.Requ
 	handler.ServeHTTP(w, r)
 }
 
-// PutTodoId operation middleware
-func (siw *ServerInterfaceWrapper) PutTodoId(w http.ResponseWriter, r *http.Request) {
+// UpdateTodo operation middleware
+func (siw *ServerInterfaceWrapper) UpdateTodo(w http.ResponseWriter, r *http.Request) {
 
 	var err error
 
@@ -169,7 +163,7 @@ func (siw *ServerInterfaceWrapper) PutTodoId(w http.ResponseWriter, r *http.Requ
 	}
 
 	handler := http.Handler(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		siw.Handler.PutTodoId(w, r, id)
+		siw.Handler.UpdateTodo(w, r, id)
 	}))
 
 	for _, middleware := range siw.HandlerMiddlewares {
@@ -193,11 +187,11 @@ func (siw *ServerInterfaceWrapper) GetTodos(w http.ResponseWriter, r *http.Reque
 	handler.ServeHTTP(w, r)
 }
 
-// PostTodos operation middleware
-func (siw *ServerInterfaceWrapper) PostTodos(w http.ResponseWriter, r *http.Request) {
+// CreateTodo operation middleware
+func (siw *ServerInterfaceWrapper) CreateTodo(w http.ResponseWriter, r *http.Request) {
 
 	handler := http.Handler(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		siw.Handler.PostTodos(w, r)
+		siw.Handler.CreateTodo(w, r)
 	}))
 
 	for _, middleware := range siw.HandlerMiddlewares {
@@ -321,107 +315,20 @@ func HandlerWithOptions(si ServerInterface, options ChiServerOptions) http.Handl
 	}
 
 	r.Group(func(r chi.Router) {
-		r.Delete(options.BaseURL+"/todo/{id}", wrapper.DeleteTodoId)
+		r.Delete(options.BaseURL+"/todo/{id}", wrapper.DeleteTodo)
 	})
 	r.Group(func(r chi.Router) {
-		r.Get(options.BaseURL+"/todo/{id}", wrapper.GetTodoId)
+		r.Get(options.BaseURL+"/todo/{id}", wrapper.GetTodo)
 	})
 	r.Group(func(r chi.Router) {
-		r.Put(options.BaseURL+"/todo/{id}", wrapper.PutTodoId)
+		r.Put(options.BaseURL+"/todo/{id}", wrapper.UpdateTodo)
 	})
 	r.Group(func(r chi.Router) {
 		r.Get(options.BaseURL+"/todos", wrapper.GetTodos)
 	})
 	r.Group(func(r chi.Router) {
-		r.Post(options.BaseURL+"/todos", wrapper.PostTodos)
+		r.Post(options.BaseURL+"/todos", wrapper.CreateTodo)
 	})
 
 	return r
-}
-
-// Base64 encoded, gzipped, json marshaled Swagger object
-var swaggerSpec = []string{
-
-	"H4sIAAAAAAAC/9xWTW/bMAz9KwK3oxF76wYUvrXrUAQ7rNjHaehBtZhEhS2qFN0hCPzfB0lBmiDOumFZ",
-	"Dr0lJE2+9/hhr6ChzpNDJwHqFYRmgZ1OPz8wasFvZOhKKBo8k0cWi8ltMDRsvVhy8a8sPUINQdi6OQwF",
-	"iJUWRzzRlS10d4+NxNhYZL9CRNaioNnKckfUonbxoSbhMxey5bZOcI4c3c/hs2bU3Oog3735Xea/YZZT",
-	"HRTxGYrH0ziarJvRXufg4maqZsSq007PrZsrIUPKCnYBNhVSh9TFzRQKeEQO+dE3k2pSRRzk0WlvoYaz",
-	"STU5gwK8lkViWMZ05cqaIZeObPdBXCW70qk4pISso29qNt4IYWpSbtYdCnKA+scKbEwQ60EBTnepWTGM",
-	"8aG3HKUV7rFYj/aYWrcxOHhyIXflbVXtQ/z8KTJ9N+a61EZ9wYceQ+r5+7GYqRNkp1v1FfkRWX1kJs59",
-	"maPsx1+jrOVQd0uVCO2Kco1yckUacoIuodXet7ZJcMr7kOfzKd9rxhnU8Kp8ui7l+rSUadkT8VMJ7PsR",
-	"gfNmHhq5m/5/q5vYXJJZHk3Y3VszJOovpotDkU9JInJ4Y9pW5agD6xLgHzXJh/GPxNkcYc2slyceeQoj",
-	"EuVXutLK4c8Dc09hS6fjz+juR8VLm9GhgJBs+VL03EINCxFfl2VLjW4XFKQ+r86rMr4uh9vhVwAAAP//",
-	"/AnzBoAJAAA=",
-}
-
-// GetSwagger returns the content of the embedded swagger specification file
-// or error if failed to decode
-func decodeSpec() ([]byte, error) {
-	zipped, err := base64.StdEncoding.DecodeString(strings.Join(swaggerSpec, ""))
-	if err != nil {
-		return nil, fmt.Errorf("error base64 decoding spec: %w", err)
-	}
-	zr, err := gzip.NewReader(bytes.NewReader(zipped))
-	if err != nil {
-		return nil, fmt.Errorf("error decompressing spec: %w", err)
-	}
-	var buf bytes.Buffer
-	_, err = buf.ReadFrom(zr)
-	if err != nil {
-		return nil, fmt.Errorf("error decompressing spec: %w", err)
-	}
-
-	return buf.Bytes(), nil
-}
-
-var rawSpec = decodeSpecCached()
-
-// a naive cached of a decoded swagger spec
-func decodeSpecCached() func() ([]byte, error) {
-	data, err := decodeSpec()
-	return func() ([]byte, error) {
-		return data, err
-	}
-}
-
-// Constructs a synthetic filesystem for resolving external references when loading openapi specifications.
-func PathToRawSpec(pathToFile string) map[string]func() ([]byte, error) {
-	res := make(map[string]func() ([]byte, error))
-	if len(pathToFile) > 0 {
-		res[pathToFile] = rawSpec
-	}
-
-	return res
-}
-
-// GetSwagger returns the Swagger specification corresponding to the generated code
-// in this file. The external references of Swagger specification are resolved.
-// The logic of resolving external references is tightly connected to "import-mapping" feature.
-// Externally referenced files must be embedded in the corresponding golang packages.
-// Urls can be supported but this task was out of the scope.
-func GetSwagger() (swagger *openapi3.T, err error) {
-	resolvePath := PathToRawSpec("")
-
-	loader := openapi3.NewLoader()
-	loader.IsExternalRefsAllowed = true
-	loader.ReadFromURIFunc = func(loader *openapi3.Loader, url *url.URL) ([]byte, error) {
-		pathToFile := url.String()
-		pathToFile = path.Clean(pathToFile)
-		getSpec, ok := resolvePath[pathToFile]
-		if !ok {
-			err1 := fmt.Errorf("path not found: %s", pathToFile)
-			return nil, err1
-		}
-		return getSpec()
-	}
-	var specData []byte
-	specData, err = rawSpec()
-	if err != nil {
-		return
-	}
-	swagger, err = loader.LoadFromData(specData)
-	if err != nil {
-		return
-	}
-	return
 }
