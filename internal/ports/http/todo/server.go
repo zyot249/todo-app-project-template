@@ -1,4 +1,4 @@
-package http
+package todo
 
 import (
 	"net/http"
@@ -15,10 +15,10 @@ import (
 func RunServer(createHandler func(router chi.Router) http.Handler) {
 	apiRouter := chi.NewRouter()
 	setMiddleware(apiRouter)
+	setSwaggerDoc(apiRouter)
 
 	rootRouter := chi.NewRouter()
 	rootRouter.Mount("/api", createHandler(apiRouter))
-	setSwaggerDoc(rootRouter)
 
 	logrus.Info("Starting server on port 8080")
 	logrus.Info("API Documentation: ", "http://localhost:8080/doc/index.html")
@@ -29,11 +29,11 @@ func RunServer(createHandler func(router chi.Router) http.Handler) {
 }
 
 func setSwaggerDoc(router *chi.Mux) {
-	router.Get("/doc.yml", func(w http.ResponseWriter, r *http.Request) {
+	router.Get("/todo/doc.yml", func(w http.ResponseWriter, r *http.Request) {
 		http.ServeFile(w, r, "internal/ports/http/todo/openapi.yml")
 	})
-	router.Get("/doc/*", httpSwagger.Handler(
-		httpSwagger.URL("/doc.yml"),
+	router.Get("/todo/doc/*", httpSwagger.Handler(
+		httpSwagger.URL("/todo/doc.yml"),
 	))
 }
 

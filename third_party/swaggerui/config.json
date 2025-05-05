@@ -1,0 +1,12 @@
+{
+    "urls": [
+        {
+            "name": "Todo API",
+            "url": "http://localhost:8080/api/todo/doc.yml"
+        },
+        {
+            "name": "Auth API",
+            "url": "http://localhost:8080/api/auth/doc.yml"
+        }
+    ]
+}

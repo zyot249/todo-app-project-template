@@ -23,8 +23,14 @@ openapi:
 		fi \
 	done
 
-run:
+run-todo:
 	go run cmd/todo/main.go
+
+run-auth:
+	go run cmd/auth/main.go
+
+run-swaggerui:
+	go run cmd/swaggerui/main.go
 
 test:
 	go test -v ./...

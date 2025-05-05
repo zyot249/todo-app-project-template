@@ -3,7 +3,6 @@ package main
 import (
 	"net/http"
 	"todo-app/internal/app"
-	todoHttp "todo-app/internal/ports/http"
 	"todo-app/internal/ports/http/todo"
 	"todo-app/pkg/core/logs"
 
@@ -18,7 +17,7 @@ func main() {
 
 	app := app.NewApplication(logger)
 
-	todoHttp.RunServer(func(router chi.Router) http.Handler {
+	todo.RunServer(func(router chi.Router) http.Handler {
 		return todo.HandlerFromMux(todo.NewTodoHandler(app), router)
 	})
 }

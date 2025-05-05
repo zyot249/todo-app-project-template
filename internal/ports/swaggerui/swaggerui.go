@@ -1,0 +1,5 @@
+package swaggerui
+
+func Run() {
+
+}
