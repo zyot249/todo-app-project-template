@@ -6,40 +6,10 @@ package todo
 import (
 	"fmt"
 	"net/http"
-	"time"
 
 	"github.com/go-chi/chi/v5"
 	"github.com/oapi-codegen/runtime"
 )
-
-// CreateTodoDto defines model for CreateTodoDto.
-type CreateTodoDto struct {
-	Description string `json:"description"`
-	Title       string `json:"title"`
-}
-
-// Todo defines model for Todo.
-type Todo struct {
-	Completed     bool      `json:"completed"`
-	CreatedAt     time.Time `json:"createdAt"`
-	Description   string    `json:"description"`
-	Id            string    `json:"id"`
-	LastUpdatedAt time.Time `json:"lastUpdatedAt"`
-	Title         string    `json:"title"`
-}
-
-// UpdateTodoDto defines model for UpdateTodoDto.
-type UpdateTodoDto struct {
-	Completed   *bool   `json:"completed,omitempty"`
-	Description *string `json:"description,omitempty"`
-	Title       *string `json:"title,omitempty"`
-}
-
-// UpdateTodoJSONRequestBody defines body for UpdateTodo for application/json ContentType.
-type UpdateTodoJSONRequestBody = UpdateTodoDto
-
-// CreateTodoJSONRequestBody defines body for CreateTodo for application/json ContentType.
-type CreateTodoJSONRequestBody = CreateTodoDto
 
 // ServerInterface represents all server handlers.
 type ServerInterface interface {

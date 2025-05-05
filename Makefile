@@ -10,15 +10,21 @@ openapi:
 			echo "Processing $$dir"; \
 			cd $$dir && \
 			go run -modfile=../../../../tools/go.mod github.com/oapi-codegen/oapi-codegen/v2/cmd/oapi-codegen \
+			-generate chi-server \
 			-config ./openapi.cfg.yml \
-			-o ./openapi.gen.go \
+			-o ./openapi_server.gen.go \
+			./openapi.yml; \
+			go run -modfile=../../../../tools/go.mod github.com/oapi-codegen/oapi-codegen/v2/cmd/oapi-codegen \
+			-generate types \
+			-config ./openapi.cfg.yml \
+			-o ./openapi_types.gen.go \
 			./openapi.yml; \
 			cd - > /dev/null; \
 		fi \
 	done
 
 run:
-	go run cmd/todoapp/main.go
+	go run cmd/todo/main.go
 
 test:
 	go test -v ./...

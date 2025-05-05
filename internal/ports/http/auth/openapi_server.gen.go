@@ -10,20 +10,6 @@ import (
 	"github.com/go-chi/chi/v5"
 )
 
-// LoginDto defines model for LoginDto.
-type LoginDto struct {
-	Email    *string `json:"email,omitempty"`
-	Password *string `json:"password,omitempty"`
-}
-
-// LoginResponseDto defines model for LoginResponseDto.
-type LoginResponseDto struct {
-	Token *string `json:"token,omitempty"`
-}
-
-// PostAuthLoginJSONRequestBody defines body for PostAuthLogin for application/json ContentType.
-type PostAuthLoginJSONRequestBody = LoginDto
-
 // ServerInterface represents all server handlers.
 type ServerInterface interface {
 
