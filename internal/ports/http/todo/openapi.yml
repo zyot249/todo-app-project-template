@@ -1,7 +1,7 @@
-openapi: '3.0.3'
+openapi: "3.0.4"
 info:
   title: Todo API
-  version: '1.0.0'
+  version: "1.0.0"
   description: API for managing todo items
 servers:
   - url: http://localhost:8080/api
@@ -10,64 +10,64 @@ paths:
   /todos:
     get:
       operationId: getTodos
-      description: 'Get all todos'
+      description: "Get all todos"
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/Todo'
-        '400':
+                  $ref: "#/components/schemas/Todo"
+        "400":
           description: Bad Request
-        '500':
+        "500":
           description: Internal Server Error
     post:
       operationId: createTodo
-      description: 'Create a new todo'
+      description: "Create a new todo"
       parameters: []
       requestBody:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/CreateTodoDto'
+              $ref: "#/components/schemas/CreateTodoDto"
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Todo'
-        '400':
+                $ref: "#/components/schemas/Todo"
+        "400":
           description: Bad Request
-        '500':
+        "500":
           description: Internal Server Error
   /todo/{id}:
     get:
       operationId: getTodo
-      description: 'Get a todo by id'
-      parameters:
+      description: "Get a todo by id"
+      parameters: 
         - name: id
           in: path
           required: true
           schema:
             type: string
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Todo'
-        '400':
+                $ref: "#/components/schemas/Todo"
+        "400":
           description: Bad Request
-        '500':
+        "500":
           description: Internal Server Error
     put:
       operationId: updateTodo
-      description: 'Update a todo'
+      description: "Update a todo"
       parameters:
         - name: id
           in: path
@@ -78,21 +78,21 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/UpdateTodoDto'
+              $ref: "#/components/schemas/UpdateTodoDto"
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Todo'
-        '400':
+                $ref: "#/components/schemas/Todo"
+        "400":
           description: Bad Request
-        '500':
+        "500":
           description: Internal Server Error
     delete:
       operationId: deleteTodo
-      description: 'Delete a todo'
+      description: "Delete a todo"
       parameters:
         - name: id
           in: path
@@ -100,11 +100,11 @@ paths:
           schema:
             type: string
       responses:
-        '200':
+        "200":
           description: OK
-        '400':
+        "400":
           description: Bad Request
-        '500':
+        "500":
           description: Internal Server Error
 
 components:
