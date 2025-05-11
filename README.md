@@ -79,18 +79,12 @@ todo-app/
   go test ./...
   ```
 
-- Generate documentation:
-
-  ```bash
-  swag init
-  ```
-
 ## API Documentation
 
 Once the service is running, you can access the API documentation at:
 
 ```text
-http://localhost:8080/swagger/index.html
+http://localhost:8080/api/{service}/doc/index.html
 ```
 
 ## Contributing

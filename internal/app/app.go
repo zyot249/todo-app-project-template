@@ -1,13 +1,12 @@
 package app
 
-import "github.com/sirupsen/logrus"
+import (
+	"todo-app/internal/adapters/repositories"
+
+	"github.com/sirupsen/logrus"
+)
 
 type Application struct {
-	logger *logrus.Entry
-}
-
-func NewApplication(logger *logrus.Entry) Application {
-	return Application{
-		logger: logger,
-	}
+	Logger         *logrus.Entry
+	TodoRepository repositories.ITodoRepository
 }

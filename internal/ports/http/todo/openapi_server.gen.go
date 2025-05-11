@@ -15,13 +15,13 @@ import (
 type ServerInterface interface {
 
 	// (DELETE /todo/{id})
-	DeleteTodo(w http.ResponseWriter, r *http.Request, id string)
+	DeleteTodo(w http.ResponseWriter, r *http.Request, id int)
 
 	// (GET /todo/{id})
-	GetTodo(w http.ResponseWriter, r *http.Request, id string)
+	GetTodo(w http.ResponseWriter, r *http.Request, id int)
 
 	// (PUT /todo/{id})
-	UpdateTodo(w http.ResponseWriter, r *http.Request, id string)
+	UpdateTodo(w http.ResponseWriter, r *http.Request, id int)
 
 	// (GET /todos)
 	GetTodos(w http.ResponseWriter, r *http.Request)
@@ -35,17 +35,17 @@ type ServerInterface interface {
 type Unimplemented struct{}
 
 // (DELETE /todo/{id})
-func (_ Unimplemented) DeleteTodo(w http.ResponseWriter, r *http.Request, id string) {
+func (_ Unimplemented) DeleteTodo(w http.ResponseWriter, r *http.Request, id int) {
 	w.WriteHeader(http.StatusNotImplemented)
 }
 
 // (GET /todo/{id})
-func (_ Unimplemented) GetTodo(w http.ResponseWriter, r *http.Request, id string) {
+func (_ Unimplemented) GetTodo(w http.ResponseWriter, r *http.Request, id int) {
 	w.WriteHeader(http.StatusNotImplemented)
 }
 
 // (PUT /todo/{id})
-func (_ Unimplemented) UpdateTodo(w http.ResponseWriter, r *http.Request, id string) {
+func (_ Unimplemented) UpdateTodo(w http.ResponseWriter, r *http.Request, id int) {
 	w.WriteHeader(http.StatusNotImplemented)
 }
 
@@ -74,7 +74,7 @@ func (siw *ServerInterfaceWrapper) DeleteTodo(w http.ResponseWriter, r *http.Req
 	var err error
 
 	// ------------- Path parameter "id" -------------
-	var id string
+	var id int
 
 	err = runtime.BindStyledParameterWithOptions("simple", "id", chi.URLParam(r, "id"), &id, runtime.BindStyledParameterOptions{ParamLocation: runtime.ParamLocationPath, Explode: false, Required: true})
 	if err != nil {
@@ -99,7 +99,7 @@ func (siw *ServerInterfaceWrapper) GetTodo(w http.ResponseWriter, r *http.Reques
 	var err error
 
 	// ------------- Path parameter "id" -------------
-	var id string
+	var id int
 
 	err = runtime.BindStyledParameterWithOptions("simple", "id", chi.URLParam(r, "id"), &id, runtime.BindStyledParameterOptions{ParamLocation: runtime.ParamLocationPath, Explode: false, Required: true})
 	if err != nil {
@@ -124,7 +124,7 @@ func (siw *ServerInterfaceWrapper) UpdateTodo(w http.ResponseWriter, r *http.Req
 	var err error
 
 	// ------------- Path parameter "id" -------------
-	var id string
+	var id int
 
 	err = runtime.BindStyledParameterWithOptions("simple", "id", chi.URLParam(r, "id"), &id, runtime.BindStyledParameterOptions{ParamLocation: runtime.ParamLocationPath, Explode: false, Required: true})
 	if err != nil {

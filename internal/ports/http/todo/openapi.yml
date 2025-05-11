@@ -53,7 +53,7 @@ paths:
           in: path
           required: true
           schema:
-            type: string
+            type: integer
       responses:
         "200":
           description: OK
@@ -73,7 +73,7 @@ paths:
           in: path
           required: true
           schema:
-            type: string
+            type: integer
       requestBody:
         content:
           application/json:
@@ -98,7 +98,7 @@ paths:
           in: path
           required: true
           schema:
-            type: string
+            type: integer
       responses:
         "200":
           description: OK
@@ -115,17 +115,17 @@ components:
         - id
         - title
         - description
-        - completed
+        - finished
         - createdAt
         - lastUpdatedAt
       properties:
         id:
-          type: string
+          type: integer
         title:
           type: string
         description:
           type: string
-        completed:
+        finished:
           type: boolean
         createdAt:
           type: string
@@ -150,5 +150,5 @@ components:
           type: string
         description:
           type: string
-        completed:
+        finished:
           type: boolean

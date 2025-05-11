@@ -4,6 +4,8 @@ export
 OAPI_CODEGEN = go run -modfile=./tools/go.mod github.com/oapi-codegen/oapi-codegen/v2/cmd/oapi-codegen
 OAPI_DIRS := $(wildcard internal/ports/http/*)
 
+SQLC = go run -modfile=./tools/go.mod github.com/sqlc-dev/sqlc/cmd/sqlc
+
 openapi:
 	@for dir in $(OAPI_DIRS); do \
 		if [ -d $$dir ]; then \
@@ -22,6 +24,9 @@ openapi:
 			cd - > /dev/null; \
 		fi \
 	done
+
+sqlc:
+	$(SQLC) generate
 
 run-todo:
 	go run cmd/todo/main.go

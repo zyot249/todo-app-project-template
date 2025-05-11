@@ -10,6 +10,13 @@ type SimpleShynobiError struct {
 	Code    int
 }
 
+func FromError(err error) *SimpleShynobiError {
+	return &SimpleShynobiError{
+		Message: err.Error(),
+		Code:    500,
+	}
+}
+
 func (e SimpleShynobiError) ErrorMessage() string {
 	return e.Message
 }

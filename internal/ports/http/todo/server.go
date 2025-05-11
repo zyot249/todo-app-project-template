@@ -2,8 +2,10 @@ package todo
 
 import (
 	"net/http"
+	"todo-app/internal/adapters/db"
 	"todo-app/internal/app"
 	"todo-app/pkg/core/logs"
+	"todo-app/pkg/core/sql"
 
 	"github.com/go-chi/chi/v5"
 	"github.com/sirupsen/logrus"
@@ -18,7 +20,16 @@ func NewTodoServer() TodoServer {
 
 	logger := logrus.NewEntry(logrus.StandardLogger())
 
-	app := app.NewApplication(logger)
+	sqlDbConfig := sql.NewConfig()
+	sqlDb, err := sql.NewDBConnection(sqlDbConfig)
+	if err != nil {
+		logger.Fatalf("failed to initialize database: %v", err)
+	}
+
+	app := app.Application{
+		Logger:         logger,
+		TodoRepository: db.NewTodoRepository(sqlDb),
+	}
 	return TodoServer{app: app}
 }
 

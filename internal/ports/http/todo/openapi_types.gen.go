@@ -15,18 +15,18 @@ type CreateTodoDto struct {
 
 // Todo defines model for Todo.
 type Todo struct {
-	Completed     bool      `json:"completed"`
 	CreatedAt     time.Time `json:"createdAt"`
 	Description   string    `json:"description"`
-	Id            string    `json:"id"`
+	Finished      bool      `json:"finished"`
+	Id            int       `json:"id"`
 	LastUpdatedAt time.Time `json:"lastUpdatedAt"`
 	Title         string    `json:"title"`
 }
 
 // UpdateTodoDto defines model for UpdateTodoDto.
 type UpdateTodoDto struct {
-	Completed   *bool   `json:"completed,omitempty"`
 	Description *string `json:"description,omitempty"`
+	Finished    *bool   `json:"finished,omitempty"`
 	Title       *string `json:"title,omitempty"`
 }
 
