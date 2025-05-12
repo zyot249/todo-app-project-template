@@ -1,8 +1,8 @@
 package main
 
 import (
+	"todo-app/internal/common/core/http/server"
 	todo "todo-app/internal/todo/ports"
-	"todo-app/pkg/core/http/server"
 )
 
 func main() {

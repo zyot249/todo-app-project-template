@@ -2,10 +2,10 @@ package todo
 
 import (
 	"net/http"
+	"todo-app/internal/common/core/logs"
+	"todo-app/internal/common/core/sql"
 	db "todo-app/internal/todo/adapters"
 	"todo-app/internal/todo/app"
-	"todo-app/pkg/core/logs"
-	"todo-app/pkg/core/sql"
 
 	"github.com/go-chi/chi/v5"
 	"github.com/sirupsen/logrus"

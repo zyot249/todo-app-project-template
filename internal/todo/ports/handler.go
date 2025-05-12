@@ -3,11 +3,11 @@ package todo
 import (
 	"encoding/json"
 	"net/http"
+	"todo-app/internal/common/core/errors"
+	"todo-app/internal/common/core/http/response"
 	"todo-app/internal/todo/app"
 	"todo-app/internal/todo/constants"
 	"todo-app/internal/todo/domain"
-	"todo-app/pkg/core/errors"
-	"todo-app/pkg/core/http/response"
 )
 
 type TodoHandler struct {

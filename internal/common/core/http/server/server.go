@@ -5,7 +5,7 @@ import (
 	"net/http"
 	"os"
 	"strings"
-	"todo-app/pkg/core/http/constants"
+	"todo-app/internal/common/core/http/constants"
 
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/chi/v5/middleware"

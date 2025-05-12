@@ -1,9 +1,9 @@
 package main
 
 import (
+	"todo-app/internal/common/core/http/server"
+	"todo-app/internal/common/core/logs"
 	"todo-app/internal/swaggerui"
-	"todo-app/pkg/core/http/server"
-	"todo-app/pkg/core/logs"
 )
 
 func main() {

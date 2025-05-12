@@ -2,7 +2,7 @@ package response
 
 import (
 	"net/http"
-	"todo-app/pkg/core/errors"
+	"todo-app/internal/common/core/errors"
 
 	"github.com/go-chi/render"
 )

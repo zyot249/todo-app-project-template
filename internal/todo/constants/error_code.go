@@ -1,6 +1,6 @@
 package constants
 
-import "todo-app/pkg/core/http/constants"
+import "todo-app/internal/common/core/http/constants"
 
 type TodoErrorCodeConstant struct {
 	constants.ErrorCodeConstant

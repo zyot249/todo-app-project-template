@@ -1,7 +1,7 @@
 package constants
 
 import (
-	"todo-app/pkg/core/http/constants"
+	"todo-app/internal/common/core/http/constants"
 )
 
 type TodoMessageIdConstant struct {
