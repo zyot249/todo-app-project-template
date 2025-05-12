@@ -3,9 +3,9 @@ package todo
 import (
 	"encoding/json"
 	"net/http"
-	"todo-app/internal/app"
-	"todo-app/internal/domain/todo"
-	"todo-app/internal/ports/constants"
+	"todo-app/internal/todo/app"
+	"todo-app/internal/todo/constants"
+	"todo-app/internal/todo/domain"
 	"todo-app/pkg/core/errors"
 	"todo-app/pkg/core/http/response"
 )
@@ -62,7 +62,7 @@ func (h TodoHandler) CreateTodo(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	todo, err := h.app.TodoRepository.Create(todo.Todo{
+	todo, err := h.app.TodoRepository.Create(domain.Todo{
 		Title:       createTodoDto.Title,
 		Description: createTodoDto.Description,
 	})

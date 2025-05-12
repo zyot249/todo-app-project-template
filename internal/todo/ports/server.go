@@ -2,8 +2,8 @@ package todo
 
 import (
 	"net/http"
-	"todo-app/internal/adapters/db"
-	"todo-app/internal/app"
+	db "todo-app/internal/todo/adapters"
+	"todo-app/internal/todo/app"
 	"todo-app/pkg/core/logs"
 	"todo-app/pkg/core/sql"
 
@@ -28,7 +28,7 @@ func NewTodoServer() TodoServer {
 
 	app := app.Application{
 		Logger:         logger,
-		TodoRepository: db.NewTodoRepository(sqlDb),
+		TodoRepository: db.NewPostgresTodoRepository(sqlDb),
 	}
 	return TodoServer{app: app}
 }

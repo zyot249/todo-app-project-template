@@ -3,19 +3,19 @@ package db
 import (
 	"context"
 	"database/sql"
-	"todo-app/internal/domain/todo"
+	"todo-app/internal/todo/domain"
 )
 
-type TodoRepository struct {
+type PostgresTodoRepository struct {
 	db      *sql.DB
 	queries *Queries
 }
 
-func NewTodoRepository(db *sql.DB) *TodoRepository {
-	return &TodoRepository{db: db, queries: New(db)}
+func NewPostgresTodoRepository(db *sql.DB) *PostgresTodoRepository {
+	return &PostgresTodoRepository{db: db, queries: New(db)}
 }
 
-func (r TodoRepository) Create(todo todo.Todo) (int32, error) {
+func (r PostgresTodoRepository) Create(todo domain.Todo) (int32, error) {
 	t, err := r.queries.CreateTodo(context.Background(), CreateTodoParams{
 		Title:       todo.Title,
 		Description: todo.Description,
@@ -27,15 +27,15 @@ func (r TodoRepository) Create(todo todo.Todo) (int32, error) {
 	return t.ID, nil
 }
 
-func (r TodoRepository) All() ([]todo.Todo, error) {
+func (r PostgresTodoRepository) All() ([]domain.Todo, error) {
 	todos, err := r.queries.ListTodos(context.Background())
 	if err != nil {
 		return nil, err
 	}
 
-	todoList := make([]todo.Todo, len(todos))
+	todoList := make([]domain.Todo, len(todos))
 	for i, t := range todos {
-		todoList[i] = todo.Todo{
+		todoList[i] = domain.Todo{
 			ID:          t.ID,
 			Title:       t.Title,
 			Description: t.Description,
@@ -46,12 +46,12 @@ func (r TodoRepository) All() ([]todo.Todo, error) {
 	return todoList, nil
 }
 
-func (r TodoRepository) Get(id int32) (todo.Todo, error) {
+func (r PostgresTodoRepository) Get(id int32) (domain.Todo, error) {
 	t, err := r.queries.GetTodo(context.Background(), id)
 	if err != nil {
-		return todo.Todo{}, err
+		return domain.Todo{}, err
 	}
-	return todo.Todo{
+	return domain.Todo{
 		ID:          t.ID,
 		Title:       t.Title,
 		Description: t.Description,
@@ -60,11 +60,11 @@ func (r TodoRepository) Get(id int32) (todo.Todo, error) {
 	}, nil
 }
 
-func (r TodoRepository) Update(todo todo.Todo) error {
+func (r PostgresTodoRepository) Update(todo domain.Todo) error {
 	panic("not implemented") // TODO: Implement
 }
 
-func (r TodoRepository) Delete(id int32) error {
+func (r PostgresTodoRepository) Delete(id int32) error {
 	err := r.queries.DeleteTodo(context.Background(), id)
 	if err != nil {
 		return err

@@ -1,7 +1,7 @@
 package main
 
 import (
-	"todo-app/internal/ports/http/todo"
+	todo "todo-app/internal/todo/ports"
 	"todo-app/pkg/core/http/server"
 )
 
