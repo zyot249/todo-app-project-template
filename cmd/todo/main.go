@@ -6,5 +6,5 @@ import (
 )
 
 func main() {
-	server.Start(todo.NewTodoServer())
+	server.Start(todo.NewTodoHTTPServer())
 }

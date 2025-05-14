@@ -17,10 +17,6 @@ func (s SwaggerUIServer) GetPort() string {
 	return "8000"
 }
 
-func (s SwaggerUIServer) GetHost() string {
-	return "localhost"
-}
-
 func (s SwaggerUIServer) GetServiceName() string {
 	return "swaggerui"
 }

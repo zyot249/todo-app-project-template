@@ -14,9 +14,8 @@ import (
 	httpSwagger "github.com/swaggo/http-swagger/v2"
 )
 
-type ShynobiServer interface {
+type ShynobiHTTPServer interface {
 	GetPort() string
-	GetHost() string
 	GetServiceName() string
 	RegisterMiddlewares(router *chi.Mux)
 	CreateApiHandler(router *chi.Mux) http.Handler
@@ -24,9 +23,12 @@ type ShynobiServer interface {
 	HaveApiSwaggerDoc() bool
 }
 
-func Start(server ShynobiServer) {
-	addr := fmt.Sprintf("%s:%s", server.GetHost(), server.GetPort())
-	endpoint := fmt.Sprintf("http://%s", addr)
+func Start(server ShynobiHTTPServer) {
+	port := server.GetPort()
+	serviceName := server.GetServiceName()
+
+	addr := fmt.Sprintf(":%s", port)
+	endpoint := fmt.Sprintf("http://localhost%s", addr)
 
 	apiRouter := chi.NewRouter()
 
@@ -34,8 +36,8 @@ func Start(server ShynobiServer) {
 	server.RegisterMiddlewares(apiRouter)
 
 	if server.HaveApiSwaggerDoc() {
-		registerSwaggerDoc(apiRouter, server.GetServiceName())
-		logrus.Info("API Swagger Doc: ", endpoint+constants.BaseApiPath+fmt.Sprintf(constants.SwaggerEndpointFormat, server.GetServiceName()))
+		registerSwaggerDoc(apiRouter, serviceName)
+		logrus.Info("API Swagger Doc: ", endpoint+constants.BaseApiPath+fmt.Sprintf(constants.SwaggerEndpointFormat, serviceName))
 	}
 
 	rootRouter := chi.NewRouter()

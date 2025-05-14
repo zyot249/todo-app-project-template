@@ -11,11 +11,11 @@ import (
 	"github.com/sirupsen/logrus"
 )
 
-type TodoServer struct {
+type TodoHTTPServer struct {
 	app app.Application
 }
 
-func NewTodoServer() TodoServer {
+func NewTodoHTTPServer() TodoHTTPServer {
 	logs.Init()
 
 	logger := logrus.NewEntry(logrus.StandardLogger())
@@ -30,32 +30,28 @@ func NewTodoServer() TodoServer {
 		Logger:         logger,
 		TodoRepository: db.NewPostgresTodoRepository(sqlDb),
 	}
-	return TodoServer{app: app}
+	return TodoHTTPServer{app: app}
 }
 
-func (s TodoServer) GetHost() string {
-	return "localhost"
-}
-
-func (s TodoServer) GetPort() string {
+func (s TodoHTTPServer) GetPort() string {
 	return "8080"
 }
 
-func (s TodoServer) GetServiceName() string {
+func (s TodoHTTPServer) GetServiceName() string {
 	return "todo"
 }
 
-func (s TodoServer) RegisterMiddlewares(router *chi.Mux) {
+func (s TodoHTTPServer) RegisterMiddlewares(router *chi.Mux) {
 }
 
-func (s TodoServer) CreateApiHandler(router *chi.Mux) http.Handler {
+func (s TodoHTTPServer) CreateApiHandler(router *chi.Mux) http.Handler {
 	return HandlerFromMux(NewTodoHandler(s.app), router)
 }
 
-func (s TodoServer) CreateRootHandler(router *chi.Mux) http.Handler {
+func (s TodoHTTPServer) CreateRootHandler(router *chi.Mux) http.Handler {
 	return router
 }
 
-func (s TodoServer) HaveApiSwaggerDoc() bool {
+func (s TodoHTTPServer) HaveApiSwaggerDoc() bool {
 	return true
 }
